@@ -1,7 +1,5 @@
 ﻿using NSubstitute;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace PvmCalculator
@@ -28,8 +26,8 @@ namespace PvmCalculator
 
             //Assert
             Assert.Equal("€121.00", pvmCalculator.CalculateSum(100, seller, buyer));
-
         }
+
         [Fact]
         public void getPvm_shouldReturnExpectedPvm() //Mock with NSubstitute
         {
@@ -70,7 +68,6 @@ namespace PvmCalculator
         [InlineData("LT", true, "EE", true, 100, "€100.00")]
         [InlineData("LT", true, "LT", false, 200.12, "€242.15")]
         [InlineData("LT", true, "Non EU", false, 200.12, "€200.12")]
-
         public void pvmCalculator_ShouldCalculateCorrectSum(string sellerCountry, bool sellerIsPvmPayer, string buyerCountry, bool buyerIsPvmPayer, decimal Sum, string expected)
         {
             //Arrange
@@ -102,6 +99,7 @@ namespace PvmCalculator
 
             Assert.Equal(expected, result);
         }
+
         [Fact]       
         public void CalculateSum_ShouldThrowException()
         {
