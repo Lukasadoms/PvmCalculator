@@ -1,41 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace PvmCalculator
 {
-    public class PvmCalculator
+    public interface IPvmCalculator
+    {
+        public decimal GetPvm(Seller seller);
+        public decimal CalculatePvm(decimal sum, decimal pvm);
+        public string CalculateSum(decimal Sum, Seller seller, Buyer buyer);
+
+    }
+    public class PvmCalculator : IPvmCalculator
     {
 
-        public static decimal Pvm { get; set; }
-       
-        
-        decimal result;
         public decimal GetPvm(Seller seller)
         {
-            Pvm = seller.Country switch
+            decimal Pvm = seller.Country switch
             {
                 "LT" => 21,
                 "LV" => 22,
-                "EE" => 20,
-                "Non EU" => 0,
-                _ => 0
+                "EE" => 20, 
+                "Non EU" => 0,  //More Countries can be added here
+                _ => throw new ArgumentException(string.Format("{0} is not a valid country", seller.Country))
             };
             return Pvm;
 
         }
 
-        public static decimal CalculatePvm(decimal sum, decimal pvm)
+        public decimal CalculatePvm(decimal sum, decimal pvm)
         {
             decimal sumPvm = sum + sum * pvm / 100;
 
-            return sumPvm;
+            return Math.Round(sumPvm, 2);
         }
 
         public string CalculateSum(decimal Sum, Seller seller, Buyer buyer)
         {
+            decimal result;
+            if (Sum < 0)
+            {
+                throw new ArgumentException(string.Format("{0} invalid argument for Sum", Sum));
+            }
 
-            if (seller.PvmPayer == false || buyer.Country == "Non EU" || buyer.Country != seller.Country && buyer.PvmPayer == true)
+            else if (seller.PvmPayer == false || buyer.Country == "Non EU" || buyer.Country != seller.Country && buyer.PvmPayer == true)
             {
                 result = Sum;
             }
